@@ -24,14 +24,18 @@ export default function VirtualTryOn() {
   
   const [showSettings, setShowSettings] = useState(false);
   const [customApiKey, setCustomApiKey] = useState<string>('');
+  const [selectedModel, setSelectedModel] = useState<string>('gemini-2.5-flash-image');
 
   useEffect(() => {
     const savedKey = localStorage.getItem('gemini_api_key');
+    const savedModel = localStorage.getItem('gemini_model');
     if (savedKey) setCustomApiKey(savedKey);
+    if (savedModel) setSelectedModel(savedModel);
   }, []);
 
   const saveSettings = () => {
     localStorage.setItem('gemini_api_key', customApiKey);
+    localStorage.setItem('gemini_model', selectedModel);
     setShowSettings(false);
   };
 
@@ -88,7 +92,7 @@ export default function VirtualTryOn() {
 
     try {
       const ai = getAI(customApiKey);
-      const model = "gemini-2.5-flash-image";
+      const model = selectedModel;
 
       const response = await ai.models.generateContent({
         model,
@@ -195,6 +199,23 @@ export default function VirtualTryOn() {
               </div>
 
               <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-semibold mb-2">Mô hình AI (Model)</label>
+                  <select 
+                    value={selectedModel}
+                    onChange={(e) => setSelectedModel(e.target.value)}
+                    className="w-full px-4 py-3 bg-black/5 border border-transparent focus:border-black/10 focus:bg-white rounded-xl outline-none transition-all text-sm appearance-none cursor-pointer"
+                  >
+                    <option value="gemini-2.5-flash-image">Gemini 2.5 Flash Image (Mặc định)</option>
+                    <option value="gemini-3-pro-image-preview">Gemini 3 Pro Image (Chất lượng cao)</option>
+                    <option value="gemini-3.1-flash-image-preview">Gemini 3.1 Flash Image (Mới nhất)</option>
+                    <option value="imagen-4.0-generate-001">Imagen 4 Generate (Chuyên dụng)</option>
+                  </select>
+                  <p className="mt-2 text-[11px] text-black/40 leading-relaxed">
+                    Chọn mô hình phù hợp với nhu cầu của bạn. Các mô hình Pro/3.1 có thể yêu cầu API Key trả phí.
+                  </p>
+                </div>
+
                 <div>
                   <label className="block text-sm font-semibold mb-2">Gemini API Key</label>
                   <input 
