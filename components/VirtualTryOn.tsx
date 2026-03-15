@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
-import { Upload, Shirt, User, ArrowRight, Loader2, Sparkles, RefreshCw, Download } from 'lucide-react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { Upload, Shirt, User, ArrowRight, Loader2, Sparkles, RefreshCw, Download, Settings, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Image from 'next/image';
 import { getAI } from '@/lib/gemini';
@@ -21,6 +21,19 @@ export default function VirtualTryOn() {
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  const [showSettings, setShowSettings] = useState(false);
+  const [customApiKey, setCustomApiKey] = useState<string>('');
+
+  useEffect(() => {
+    const savedKey = localStorage.getItem('gemini_api_key');
+    if (savedKey) setCustomApiKey(savedKey);
+  }, []);
+
+  const saveSettings = () => {
+    localStorage.setItem('gemini_api_key', customApiKey);
+    setShowSettings(false);
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'model' | 'top' | 'bottom' | 'full') => {
     const file = e.target.files?.[0];
@@ -74,7 +87,7 @@ export default function VirtualTryOn() {
     setError(null);
 
     try {
-      const ai = getAI();
+      const ai = getAI(customApiKey);
       const model = "gemini-2.5-flash-image";
 
       const response = await ai.models.generateContent({
@@ -143,13 +156,72 @@ export default function VirtualTryOn() {
             </div>
             <span className="font-bold tracking-tight text-lg">VIRTUAL TRY-ON AI</span>
           </div>
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium opacity-60">
-            <a href="#" className="hover:opacity-100 transition-opacity">Bộ sưu tập</a>
-            <a href="#" className="hover:opacity-100 transition-opacity">Công nghệ</a>
-            <a href="#" className="hover:opacity-100 transition-opacity">Hỗ trợ</a>
-          </nav>
+          <div className="flex items-center gap-4">
+            <nav className="hidden md:flex items-center gap-8 text-sm font-medium opacity-60">
+              <a href="#" className="hover:opacity-100 transition-opacity">Bộ sưu tập</a>
+              <a href="#" className="hover:opacity-100 transition-opacity">Công nghệ</a>
+            </nav>
+            <button 
+              onClick={() => setShowSettings(true)}
+              className="p-2 hover:bg-black/5 rounded-full transition-colors"
+            >
+              <Settings size={20} />
+            </button>
+          </div>
         </div>
       </header>
+
+      <AnimatePresence>
+        {showSettings && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowSettings(false)}
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-md bg-white rounded-[32px] p-8 shadow-2xl"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold">Cài đặt hệ thống</h3>
+                <button onClick={() => setShowSettings(false)} className="p-2 hover:bg-black/5 rounded-full">
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-semibold mb-2">Gemini API Key</label>
+                  <input 
+                    type="password"
+                    value={customApiKey}
+                    onChange={(e) => setCustomApiKey(e.target.value)}
+                    placeholder="Nhập API Key của bạn..."
+                    className="w-full px-4 py-3 bg-black/5 border border-transparent focus:border-black/10 focus:bg-white rounded-xl outline-none transition-all text-sm"
+                  />
+                  <p className="mt-2 text-[11px] text-black/40 leading-relaxed">
+                    Khóa này sẽ được lưu cục bộ trên trình duyệt của bạn. Nếu để trống, hệ thống sẽ sử dụng khóa mặc định của máy chủ (nếu có).
+                  </p>
+                </div>
+
+                <div className="pt-4">
+                  <button 
+                    onClick={saveSettings}
+                    className="w-full bg-black text-white py-3 rounded-xl font-bold hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  >
+                    Lưu cấu hình
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       <main className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid lg:grid-cols-12 gap-12">
