@@ -206,13 +206,53 @@ export default function VirtualTryOn() {
                     onChange={(e) => setSelectedModel(e.target.value)}
                     className="w-full px-4 py-3 bg-black/5 border border-transparent focus:border-black/10 focus:bg-white rounded-xl outline-none transition-all text-sm appearance-none cursor-pointer"
                   >
-                    <option value="gemini-2.5-flash-image">Gemini 2.5 Flash Image (Mặc định)</option>
-                    <option value="gemini-3-pro-image-preview">Gemini 3 Pro Image (Chất lượng cao)</option>
-                    <option value="gemini-3.1-flash-image-preview">Gemini 3.1 Flash Image (Mới nhất)</option>
-                    <option value="imagen-4.0-generate-001">Imagen 4 Generate (Chuyên dụng)</option>
+                    <optgroup label="Hình ảnh & Thử đồ (Khuyên dùng)">
+                      <option value="gemini-2.5-flash-image">Nano Banana (Gemini 2.5 Flash Image)</option>
+                      <option value="gemini-3-pro-image-preview">Nano Banana Pro (Gemini 3 Pro Image)</option>
+                      <option value="gemini-3.1-flash-image-preview">Nano Banana 2 (Gemini 3.1 Flash Image)</option>
+                      <option value="imagen-4.0-generate-001">Imagen 4 Generate</option>
+                    </optgroup>
+                    
+                    <optgroup label="Video (Veo)">
+                      <option value="veo-3.1-generate-preview">Veo 3 Generate</option>
+                      <option value="veo-3.1-fast-generate-preview">Veo 3 Fast Generate</option>
+                    </optgroup>
+
+                    <optgroup label="Văn bản & Đa phương thức (Gemini)">
+                      <option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
+                      <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro</option>
+                      <option value="gemini-2-flash">Gemini 2 Flash</option>
+                      <option value="gemini-2-flash-exp">Gemini 2 Flash Exp</option>
+                      <option value="gemini-2-flash-lite">Gemini 2 Flash Lite</option>
+                      <option value="gemini-3-flash-preview">Gemini 3 Flash</option>
+                      <option value="gemini-2.5-flash-lite">Gemini 2.5 Flash Lite</option>
+                      <option value="gemini-3.1-flash-lite-preview">Gemini 3.1 Flash Lite</option>
+                    </optgroup>
+
+                    <optgroup label="Gemma 3">
+                      <option value="gemma-3-1b">Gemma 3 1B</option>
+                      <option value="gemma-3-2b">Gemma 3 2B</option>
+                      <option value="gemma-3-4b">Gemma 3 4B</option>
+                      <option value="gemma-3-12b">Gemma 3 12B</option>
+                      <option value="gemma-3-27b">Gemma 3 27B</option>
+                    </optgroup>
+
+                    <optgroup label="Âm thanh & TTS">
+                      <option value="gemini-2.5-flash-preview-tts">Gemini 2.5 Flash TTS</option>
+                      <option value="gemini-2.5-pro-preview-tts">Gemini 2.5 Pro TTS</option>
+                      <option value="gemini-2.5-flash-native-audio-preview-09-2025">Gemini 2.5 Flash Native Audio Dialog</option>
+                    </optgroup>
+
+                    <optgroup label="Chuyên dụng & Thử nghiệm">
+                      <option value="gemini-robotics-er-1.5-preview">Gemini Robotics ER 1.5 Preview</option>
+                      <option value="computer-use-preview">Computer Use Preview</option>
+                      <option value="deep-research-pro-preview">Deep Research Pro Preview</option>
+                      <option value="gemini-embedding-1">Gemini Embedding 1</option>
+                      <option value="gemini-embedding-2-preview">Gemini Embedding 2</option>
+                    </optgroup>
                   </select>
                   <p className="mt-2 text-[11px] text-black/40 leading-relaxed">
-                    Chọn mô hình phù hợp với nhu cầu của bạn. Các mô hình Pro/3.1 có thể yêu cầu API Key trả phí.
+                    Chọn mô hình phù hợp. Các mô hình Pro/3.1/Veo có thể yêu cầu API Key trả phí và có giới hạn sử dụng khác nhau.
                   </p>
                 </div>
 
